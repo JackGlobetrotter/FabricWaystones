@@ -351,7 +351,7 @@ public class UniversalWaystoneScreen extends HandledScreen<ScreenHandler> {
             var startDim = Utils.getDimensionName(client.player.world);
             var endDim = waystoneData.getWorldName();
             List<Text> tooltipContents = new ArrayList<>();
-            tooltipContents.add(Text.translatable("fwaystones.gui.cost_tooltip", Utils.getCost(Vec3d.ofCenter(waystoneData.way_getPos()), client.player.getPos(), startDim, endDim)));
+            tooltipContents.add(Text.translatable("fwaystones.gui.cost_tooltip", Utils.getCost(client.player.getPos(), Vec3d.ofCenter(waystoneData.way_getPos()), startDim, endDim)));
             if (hasShiftDown()) {
                 tooltipContents.add(Text.translatable("fwaystones.gui.dimension_tooltip", waystoneData.getWorldName()));
             }
