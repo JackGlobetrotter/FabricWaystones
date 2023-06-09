@@ -126,11 +126,21 @@ public final class Utils {
     }
 
     public static int getCost(Vec3d startPos, Vec3d endPos, String startDim, String endDim) {
+        //startDim = where the player is now, endDim = where he goes!
+        //startPos = Player Pos
         var config = FabricWaystones.CONFIG.teleportation_cost;
         float cost = config.base_cost();
-        if (startDim.equals(endDim)) {
-            cost += Math.max(0, startPos.add(0, 0.5, 0).distanceTo(endPos) - 1.4142) * config.cost_per_block_distance();
-        } else {
+        if(!startDim.equals(endDim)) {
+            if (startDim.contains("the_nether") ) {
+                startPos = startPos.multiply(8, 1, 8); //Shift nether cord by 8 to match nether
+            }
+            if(endDim.contains("the_nether") ){
+                endPos = endPos.multiply(8, 1, 8); // Shift nether Cord by 8 to match overworld
+            }
+        }
+
+        cost += Math.max(0, startPos.add(0, 0.5, 0).distanceTo(endPos) - 1.4142) * config.cost_per_block_distance();
+        if(!startDim.equals(endDim)) {
             cost *= config.cost_multiplier_between_dimensions();
         }
         return Math.round(cost);
@@ -186,10 +196,16 @@ public final class Utils {
                 long total = determineLevelXP(player);
                 if (total < amount) {
                     player.sendMessage(Text.translatable("fwaystones.no_teleport.xp"), true);
+                    System.out.println("Player has ");
+                    System.out.println(total);
+                    System.out.println("But needs");
+                    System.out.println(amount);
                     return false;
                 }
                 if (takeCost) {
                     player.addExperience(-amount);
+                    System.out.println("Took");
+                    System.out.println(amount);
                 }
                 return true;
             }
